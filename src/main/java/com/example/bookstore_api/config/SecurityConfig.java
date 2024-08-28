@@ -91,10 +91,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
                         // Order routes
                         .requestMatchers(HttpMethod.GET, "/api/orders").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST, "/api/orders").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/api/orders/history/**").hasAnyRole("ADMIN", "USER")
                         // Cart authorization
                         .requestMatchers("/api/cart", "/api/cart/**").hasRole("USER")
+                        .requestMatchers("api/feedbacks/**").hasRole("USER")
                         // Wishlist authorization
                         .requestMatchers("/api/wishlist", "/api/wishlist/**").hasRole("USER")
                         // Allow access to other endpoints based on authentication
