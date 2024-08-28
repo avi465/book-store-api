@@ -1,12 +1,12 @@
 package com.example.bookstore_api.repository;
 
-import com.example.bookstore_api.model.Admin;
+import com.example.bookstore_api.model.Wishlist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin, Long> {
-    Optional<Admin> findByUsername(String username);
+public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
+    Optional<Wishlist> findByUsername(String username);
 }

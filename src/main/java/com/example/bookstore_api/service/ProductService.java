@@ -18,10 +18,10 @@ public class ProductService {
 
     public Product updateProduct(Long id, Product productDetails){
         Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found"));
-        product.setName(productDetails.getName());
+        product.setBookName(productDetails.getBookName());
         product.setDescription(productDetails.getDescription());
         product.setPrice(productDetails.getPrice());
-        product.setStock(productDetails.getStock());
+        product.setQuantity(productDetails.getQuantity());
 
         return productRepository.save(product);
     }

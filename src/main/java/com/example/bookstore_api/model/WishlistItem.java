@@ -12,16 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Product {
+public class WishlistItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String bookName;
-    private String author;
-    private String description;
-    private String quantity;
-    private Double price;
-    private Double discountPrice;
-    private String bookImage;
+    private Long productId;
+    private String productName;
+    private double price;
 }

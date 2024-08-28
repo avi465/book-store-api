@@ -4,6 +4,7 @@ import com.example.bookstore_api.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -83,11 +84,22 @@ public class SecurityConfig {
                         // Protect specific admin routes
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // Protect user routes
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/user/**").hasAnyRole("USER")
+                        // Only admin is allowed for below http methods
+                        .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                        // Order routes
+                        .requestMatchers(HttpMethod.GET, "/api/orders").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/history/**").hasAnyRole("ADMIN", "USER")
+                        // Cart authorization
+                        .requestMatchers("/api/cart", "/api/cart/**").hasRole("USER")
+                        // Wishlist authorization
+                        .requestMatchers("/api/wishlist", "/api/wishlist/**").hasRole("USER")
                         // Allow access to other endpoints based on authentication
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

@@ -1,12 +1,12 @@
 package com.example.bookstore_api.repository;
 
-import com.example.bookstore_api.model.Admin;
+import com.example.bookstore_api.model.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin, Long> {
-    Optional<Admin> findByUsername(String username);
+public interface CartRepository extends JpaRepository<Cart, Long> {
+    Optional<Cart> findByUsername(String username);
 }
