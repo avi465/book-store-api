@@ -1,9 +1,14 @@
 package com.example.bookstore_api.controller;
 
 import com.example.bookstore_api.model.User;
+import com.example.bookstore_api.service.JwtService;
 import com.example.bookstore_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,6 +18,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.registerUser(user));
@@ -20,12 +31,16 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody User user) {
-        User existingUser = userService.findByUsername(user.getUsername());
-        if (existingUser != null && user.getPassword().equals(existingUser.getPassword())) {
-            // Assuming JWT token creation here
-            return ResponseEntity.ok("JWT_TOKEN");
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+            );
+
+            final String jwt = jwtService.generateToken(user.getUsername());
+            return ResponseEntity.ok(jwt);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
-        return ResponseEntity.status(401).body("Invalid credentials");
     }
 
     @PutMapping("/{id}")

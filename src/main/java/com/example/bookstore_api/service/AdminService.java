@@ -12,7 +12,8 @@ public class AdminService {
     @Autowired
     private AdminRepository adminRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Admin registerAdmin(Admin admin){
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));

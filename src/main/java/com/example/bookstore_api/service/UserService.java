@@ -12,7 +12,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User registerUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
