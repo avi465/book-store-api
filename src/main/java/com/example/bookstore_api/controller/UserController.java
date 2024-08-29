@@ -1,10 +1,14 @@
 package com.example.bookstore_api.controller;
 
+import com.example.bookstore_api.dto.UserDTO;
 import com.example.bookstore_api.model.User;
 import com.example.bookstore_api.service.JwtService;
 import com.example.bookstore_api.service.UserService;
+import com.example.bookstore_api.util.ErrorResponse;
+import com.example.bookstore_api.util.LoginResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,22 +30,20 @@ public class UserController {
     private JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@Valid @RequestBody User user) {
-        return ResponseEntity.ok(userService.registerUser(user));
+    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
+        UserDTO response = userService.registerUser(userDTO);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@Valid @RequestBody User user) {
-        try {
+    public ResponseEntity<?> loginUser(@Valid @RequestBody UserDTO userDTO) {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+                    new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
             );
 
-            final String jwt = jwtService.generateToken(user.getUsername());
-            return ResponseEntity.ok(jwt);
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
+            final String jwt = jwtService.generateToken(userDTO.getUsername());
+            return new ResponseEntity<>(new LoginResponse("Logged in successfully", jwt), HttpStatus.OK);
+
     }
 
     @PutMapping("/{id}")

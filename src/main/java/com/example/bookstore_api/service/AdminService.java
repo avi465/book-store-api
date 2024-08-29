@@ -1,5 +1,8 @@
 package com.example.bookstore_api.service;
 
+import com.example.bookstore_api.dto.AdminDTO;
+import com.example.bookstore_api.exception.NotFoundException;
+import com.example.bookstore_api.mapper.AdminMapper;
 import com.example.bookstore_api.model.Admin;
 import com.example.bookstore_api.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +18,17 @@ public class AdminService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Admin registerAdmin(Admin admin){
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-        return adminRepository.save(admin);
+    @Autowired
+    private AdminMapper adminMapper;
+
+    public AdminDTO registerAdmin(AdminDTO adminDTO){
+        adminDTO.setPassword(passwordEncoder.encode(adminDTO.getPassword()));
+        Admin savedAdmin = adminRepository.save(adminMapper.toAdmin(adminDTO));
+        return adminMapper.toAdminDTO(savedAdmin);
     }
 
-    public Admin findByUsername(String username){
-        return adminRepository.findByUsername(username).orElse(null);
+    public AdminDTO findByUsername(String username){
+        Admin foundAdmin = adminRepository.findByUsername(username).orElseThrow(()-> new NotFoundException("Admin not found"));
+        return adminMapper.toAdminDTO(foundAdmin);
     }
 }

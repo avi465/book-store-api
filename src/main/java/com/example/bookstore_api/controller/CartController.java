@@ -1,5 +1,7 @@
 package com.example.bookstore_api.controller;
 
+import com.example.bookstore_api.dto.CartDTO;
+import com.example.bookstore_api.dto.CartItemDTO;
 import com.example.bookstore_api.model.Cart;
 import com.example.bookstore_api.model.CartItem;
 import com.example.bookstore_api.service.CartService;
@@ -16,14 +18,14 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping
-    public ResponseEntity<Cart> addToCart(@Valid @RequestBody CartItem item, @RequestParam String username) {
-        Cart updatedCart = cartService.addToCart(username, item);
+    public ResponseEntity<CartDTO> addToCart(@Valid @RequestBody CartItemDTO itemDTO, @RequestParam String username) {
+        CartDTO updatedCart = cartService.addToCart(username, itemDTO);
         return new ResponseEntity<>(updatedCart, HttpStatus.OK);
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<Cart> updateCartItemQuantity(@Valid @PathVariable Long itemId, @RequestParam int quantity, @RequestParam String username) {
-        Cart updatedCart = cartService.updateCartItemQuantity(username, itemId, quantity);
+    public ResponseEntity<CartDTO> updateCartItemQuantity(@Valid @PathVariable Long itemId, @RequestParam int quantity, @RequestParam String username) {
+        CartDTO updatedCart = cartService.updateCartItemQuantity(username, itemId, quantity);
         return new ResponseEntity<>(updatedCart, HttpStatus.OK);
     }
 
@@ -34,8 +36,8 @@ public class CartController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<Cart> getCart(@Valid @PathVariable String username) {
-        Cart cart = cartService.getCart(username);
+    public ResponseEntity<CartDTO> getCart(@Valid @PathVariable String username) {
+        CartDTO cart = cartService.getCart(username);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 }

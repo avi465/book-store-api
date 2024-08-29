@@ -1,5 +1,7 @@
 package com.example.bookstore_api.service;
 
+import com.example.bookstore_api.dto.CartDTO;
+import com.example.bookstore_api.dto.CartItemDTO;
 import com.example.bookstore_api.exception.NotFoundException;
 import com.example.bookstore_api.model.Cart;
 import com.example.bookstore_api.model.CartItem;
@@ -8,21 +10,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CartService {
     @Autowired
     private CartRepository cartRepository;
 
-    public Cart addToCart(String username, CartItem item) {
+    public CartDTO addToCart(String username, CartItemDTO itemDTO) {
         Cart cart = cartRepository.findByUsername(username)
                 .orElse(new Cart(username, new ArrayList<>()));
 
-        cart.getItems().add(item);
-        return cartRepository.save(cart);
+        CartItem cartItem = new CartItem();
+        cartItem.setProductId(itemDTO.getProductId());
+        cartItem.setQuantity((itemDTO.getQuantity()));
+        cartItem.setPrice(itemDTO.getPrice());
+
+        cart.getItems().add(cartItem);
+
+        cart.getItems().add(cartItem);
+        cart = cartRepository.save(cart);
+
+        return convertToDto(cart);
     }
 
-    public Cart updateCartItemQuantity(String username, Long itemId, int quantity) {
+    public CartDTO updateCartItemQuantity(String username, Long itemId, int quantity) {
         Cart cart = cartRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Cart not found"));
 
@@ -32,7 +45,8 @@ public class CartService {
                 break;
             }
         }
-        return cartRepository.save(cart);
+        cart = cartRepository.save(cart);
+        return convertToDto(cart);
     }
 
     public void removeFromCart(String username, Long itemId) {
@@ -43,8 +57,17 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public Cart getCart(String username) {
-        return cartRepository.findByUsername(username)
+    public CartDTO getCart(String username) {
+        Cart cart = cartRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Cart not found"));
+        return convertToDto(cart);
+    }
+
+    private CartDTO convertToDto(Cart cart) {
+        List<CartItemDTO> itemDTOs = cart.getItems()
+                .stream()
+                .map(item -> new CartItemDTO(item.getId(), item.getProductId(), item.getQuantity(), item.getPrice()))
+                .collect(Collectors.toList());
+        return new CartDTO(cart.getId(), cart.getUsername(), itemDTOs);
     }
 }
