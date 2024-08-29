@@ -3,6 +3,7 @@ package com.example.bookstore_api.controller;
 import com.example.bookstore_api.model.User;
 import com.example.bookstore_api.service.JwtService;
 import com.example.bookstore_api.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,12 +26,12 @@ public class UserController {
     private JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
+    public ResponseEntity<User> registerUser(@Valid @RequestBody User user) {
         return ResponseEntity.ok(userService.registerUser(user));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody User user) {
+    public ResponseEntity<String> loginUser(@Valid @RequestBody User user) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUserDetails(@PathVariable Long id, @RequestBody User userDetails) {
+    public ResponseEntity<User> updateUserDetails(@Valid @PathVariable Long id, @RequestBody User userDetails) {
         return ResponseEntity.ok(userService.updateUserDetails(id, userDetails));
     }
 }

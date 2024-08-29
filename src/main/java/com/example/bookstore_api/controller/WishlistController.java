@@ -3,6 +3,7 @@ package com.example.bookstore_api.controller;
 import com.example.bookstore_api.model.Wishlist;
 import com.example.bookstore_api.model.WishlistItem;
 import com.example.bookstore_api.service.WishlistService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +16,19 @@ public class WishlistController {
     private WishlistService wishlistService;
 
     @PostMapping
-    public ResponseEntity<Wishlist> addToWishlist(@RequestBody WishlistItem item, @RequestParam String username) {
+    public ResponseEntity<Wishlist> addToWishlist(@Valid @RequestBody WishlistItem item, @RequestParam String username) {
         Wishlist updatedWishlist = wishlistService.addToWishlist(username, item);
         return new ResponseEntity<>(updatedWishlist, HttpStatus.OK);
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<Void> removeFromWishlist(@PathVariable Long itemId, @RequestParam String username) {
+    public ResponseEntity<Void> removeFromWishlist(@Valid @PathVariable Long itemId, @RequestParam String username) {
         wishlistService.removeFromWishlist(username, itemId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<Wishlist> getWishlist(@PathVariable String username){
+    public ResponseEntity<Wishlist> getWishlist(@Valid @PathVariable String username){
         Wishlist wishlist = wishlistService.getWishlist(username);
         return new ResponseEntity<>(wishlist, HttpStatus.OK);
     }

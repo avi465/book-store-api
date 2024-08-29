@@ -46,7 +46,7 @@ Note: Add bearer token for authorized request
   POST /api/user/login
 ```
 ```http
-  PUT /users/{id} [2]
+  PUT /api/user/{id} [2]
 ```
 
 #### PRODUCT

@@ -1,5 +1,6 @@
 package com.example.bookstore_api.service;
 
+import com.example.bookstore_api.exception.NotFoundException;
 import com.example.bookstore_api.model.Product;
 import com.example.bookstore_api.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product productDetails){
-        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(()-> new NotFoundException("Product not found"));
         product.setBookName(productDetails.getBookName());
         product.setDescription(productDetails.getDescription());
         product.setPrice(productDetails.getPrice());

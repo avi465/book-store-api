@@ -1,5 +1,6 @@
 package com.example.bookstore_api.service;
 
+import com.example.bookstore_api.exception.NotFoundException;
 import com.example.bookstore_api.model.User;
 import com.example.bookstore_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class UserService {
     }
 
     public User updateUserDetails(Long id, User userDetails){
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
         user.setName(userDetails.getName());
         user.setEmail(userDetails.getEmail());
         user.setAddress(userDetails.getAddress());

@@ -3,6 +3,7 @@ package com.example.bookstore_api.controller;
 import com.example.bookstore_api.model.Admin;
 import com.example.bookstore_api.service.AdminService;
 import com.example.bookstore_api.service.JwtService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +31,12 @@ public class AdminController {
     private JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<Admin> registerAdmin(@RequestBody Admin admin) {
+    public ResponseEntity<Admin> registerAdmin(@Valid @RequestBody Admin admin) {
         return ResponseEntity.ok(adminService.registerAdmin(admin));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginAdmin(@RequestBody Admin admin) {
+    public ResponseEntity<String> loginAdmin(@Valid @RequestBody Admin admin) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(admin.getUsername(), admin.getPassword())

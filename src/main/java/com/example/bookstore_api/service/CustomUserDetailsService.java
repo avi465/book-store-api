@@ -1,5 +1,6 @@
 package com.example.bookstore_api.service;
 
+import com.example.bookstore_api.exception.NotFoundException;
 import com.example.bookstore_api.model.Admin;
 import com.example.bookstore_api.model.User;
 import com.example.bookstore_api.repository.AdminRepository;
@@ -38,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // Try to load user if not an admin
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),

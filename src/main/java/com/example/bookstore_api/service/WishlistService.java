@@ -1,5 +1,6 @@
 package com.example.bookstore_api.service;
 
+import com.example.bookstore_api.exception.NotFoundException;
 import com.example.bookstore_api.model.Wishlist;
 import com.example.bookstore_api.model.WishlistItem;
 import com.example.bookstore_api.repository.WishlistRepository;
@@ -23,7 +24,7 @@ public class WishlistService {
 
     public void removeFromWishlist(String username, Long itemId) {
         Wishlist wishlist = wishlistRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Wishlist not found"));
+                .orElseThrow(() -> new NotFoundException("Wishlist not found"));
 
         wishlist.getItems().removeIf(item -> item.getId().equals(itemId));
         wishlistRepository.save(wishlist);
@@ -31,6 +32,6 @@ public class WishlistService {
 
     public Wishlist getWishlist(String username) {
         return wishlistRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Wishlist not found"));
+                .orElseThrow(() -> new NotFoundException("Wishlist not found"));
     }
 }

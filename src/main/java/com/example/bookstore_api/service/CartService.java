@@ -1,5 +1,6 @@
 package com.example.bookstore_api.service;
 
+import com.example.bookstore_api.exception.NotFoundException;
 import com.example.bookstore_api.model.Cart;
 import com.example.bookstore_api.model.CartItem;
 import com.example.bookstore_api.repository.CartRepository;
@@ -23,7 +24,7 @@ public class CartService {
 
     public Cart updateCartItemQuantity(String username, Long itemId, int quantity) {
         Cart cart = cartRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new NotFoundException("Cart not found"));
 
         for (CartItem item : cart.getItems()) {
             if (item.getId().equals(itemId)) {
@@ -36,7 +37,7 @@ public class CartService {
 
     public void removeFromCart(String username, Long itemId) {
         Cart cart = cartRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new NotFoundException("Cart not found"));
 
         cart.getItems().removeIf(item -> item.getId().equals(itemId));
         cartRepository.save(cart);
@@ -44,6 +45,6 @@ public class CartService {
 
     public Cart getCart(String username) {
         return cartRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new NotFoundException("Cart not found"));
     }
 }
