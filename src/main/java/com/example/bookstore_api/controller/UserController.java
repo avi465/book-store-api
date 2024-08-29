@@ -4,7 +4,6 @@ import com.example.bookstore_api.dto.UserDTO;
 import com.example.bookstore_api.model.User;
 import com.example.bookstore_api.service.JwtService;
 import com.example.bookstore_api.service.UserService;
-import com.example.bookstore_api.util.ErrorResponse;
 import com.example.bookstore_api.util.LoginResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,17 +30,16 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
         UserDTO response = userService.registerUser(userDTO);
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody UserDTO userDTO) {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
-            );
-
-            final String jwt = jwtService.generateToken(userDTO.getUsername());
-            return new ResponseEntity<>(new LoginResponse("Logged in successfully", jwt), HttpStatus.OK);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
+        );
+        final String jwt = jwtService.generateToken(userDTO.getUsername());
+        return new ResponseEntity<>(new LoginResponse("Logged in successfully", jwt), HttpStatus.OK);
 
     }
 

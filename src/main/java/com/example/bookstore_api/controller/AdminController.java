@@ -1,10 +1,8 @@
 package com.example.bookstore_api.controller;
 
 import com.example.bookstore_api.dto.AdminDTO;
-import com.example.bookstore_api.model.Admin;
 import com.example.bookstore_api.service.AdminService;
 import com.example.bookstore_api.service.JwtService;
-import com.example.bookstore_api.util.ErrorResponse;
 import com.example.bookstore_api.util.LoginResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,11 +39,10 @@ public class AdminController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginAdmin(@Valid @RequestBody AdminDTO adminDTO) {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(adminDTO.getUsername(), adminDTO.getPassword())
-            );
-            final String jwt = jwtService.generateToken(adminDTO.getUsername());
-            return new ResponseEntity<>(new LoginResponse("Logged in successfully", jwt), HttpStatus.OK);
-
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(adminDTO.getUsername(), adminDTO.getPassword())
+        );
+        final String jwt = jwtService.generateToken(adminDTO.getUsername());
+        return new ResponseEntity<>(new LoginResponse("Logged in successfully", jwt), HttpStatus.OK);
     }
 }
