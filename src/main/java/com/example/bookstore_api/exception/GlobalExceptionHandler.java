@@ -43,17 +43,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ErrorResponse> handleJwtException(JwtException ex, WebRequest request) {
-        return new ResponseEntity<>(new ErrorResponse("JWT token is not valid", ex.getMessage()),HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ErrorResponse("JWT token is not valid", ex.getMessage()),HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(SignatureException.class)
     public ResponseEntity<ErrorResponse> handleSignatureException(SignatureException ex, WebRequest request) {
-        return new ResponseEntity<>(new ErrorResponse("The jwt signature is invalid", ex.getMessage()), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ErrorResponse("The jwt signature is invalid", ex.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex, WebRequest request) {
-        return new ResponseEntity<>(new ErrorResponse("The jwt token has expired", ex.getMessage()), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ErrorResponse("The jwt token has expired", ex.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
