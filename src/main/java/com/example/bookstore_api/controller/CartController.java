@@ -18,26 +18,26 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping
-    public ResponseEntity<CartDTO> addToCart(@Valid @RequestBody CartItemDTO itemDTO, @RequestParam String username) {
-        CartDTO updatedCart = cartService.addToCart(username, itemDTO);
+    public ResponseEntity<CartDTO> addToCart(@Valid @RequestBody CartItemDTO itemDTO) {
+        CartDTO updatedCart = cartService.addToCart(itemDTO);
         return new ResponseEntity<>(updatedCart, HttpStatus.OK);
     }
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<CartDTO> updateCartItemQuantity(@Valid @PathVariable Long itemId, @RequestParam int quantity, @RequestParam String username) {
-        CartDTO updatedCart = cartService.updateCartItemQuantity(username, itemId, quantity);
+    public ResponseEntity<CartDTO> updateCartItemQuantity(@Valid @PathVariable Long itemId, @RequestParam int quantity) {
+        CartDTO updatedCart = cartService.updateCartItemQuantity(itemId, quantity);
         return new ResponseEntity<>(updatedCart, HttpStatus.OK);
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<Void> removeFromCart(@Valid @PathVariable Long itemId, @RequestParam String username) {
-        cartService.removeFromCart(username, itemId);
+    public ResponseEntity<Void> removeFromCart(@Valid @PathVariable Long itemId) {
+        cartService.removeFromCart(itemId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<CartDTO> getCart(@Valid @PathVariable String username) {
-        CartDTO cart = cartService.getCart(username);
+    @GetMapping
+    public ResponseEntity<CartDTO> getCart() {
+        CartDTO cart = cartService.getCart();
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 }

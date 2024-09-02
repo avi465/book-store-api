@@ -18,7 +18,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String username;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

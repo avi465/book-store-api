@@ -5,8 +5,13 @@ import com.example.bookstore_api.dto.CartItemDTO;
 import com.example.bookstore_api.exception.NotFoundException;
 import com.example.bookstore_api.model.Cart;
 import com.example.bookstore_api.model.CartItem;
+import com.example.bookstore_api.model.Product;
 import com.example.bookstore_api.repository.CartRepository;
+import com.example.bookstore_api.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,14 +23,32 @@ public class CartService {
     @Autowired
     private CartRepository cartRepository;
 
-    public CartDTO addToCart(String username, CartItemDTO itemDTO) {
+    @Autowired
+    private ProductRepository productRepository;
+
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            return ((UserDetails) authentication.getPrincipal()).getUsername();
+        } else {
+            assert authentication != null;
+            return authentication.getName();
+        }
+    }
+
+    public CartDTO addToCart(CartItemDTO itemDTO) {
+        String username = getCurrentUsername();
+
+        Product product = productRepository.findById(itemDTO.getProductId())
+                .orElseThrow(() -> new NotFoundException("Product with given id not found"));
+
         Cart cart = cartRepository.findByUsername(username)
                 .orElse(new Cart(username, new ArrayList<>()));
 
         CartItem cartItem = new CartItem();
         cartItem.setProductId(itemDTO.getProductId());
         cartItem.setQuantity((itemDTO.getQuantity()));
-        cartItem.setPrice(itemDTO.getPrice());
+        cartItem.setPrice(product.getPrice());
 
         cart.getItems().add(cartItem);
 
@@ -35,7 +58,8 @@ public class CartService {
         return convertToDto(cart);
     }
 
-    public CartDTO updateCartItemQuantity(String username, Long itemId, int quantity) {
+    public CartDTO updateCartItemQuantity(Long itemId, int quantity) {
+        String username = getCurrentUsername();
         Cart cart = cartRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Cart not found"));
 
@@ -49,7 +73,8 @@ public class CartService {
         return convertToDto(cart);
     }
 
-    public void removeFromCart(String username, Long itemId) {
+    public void removeFromCart(Long itemId) {
+        String username = getCurrentUsername();
         Cart cart = cartRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Cart not found"));
 
@@ -57,7 +82,8 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public CartDTO getCart(String username) {
+    public CartDTO getCart() {
+        String username = getCurrentUsername();
         Cart cart = cartRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("Cart not found"));
         return convertToDto(cart);

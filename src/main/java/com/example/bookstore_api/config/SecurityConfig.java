@@ -82,22 +82,6 @@ public class SecurityConfig {
                 .build();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
-//        configuration.setAllowedMethods(Collections.singletonList("*"));
-//        configuration.setAllowedHeaders(Collections.singletonList("*"));
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//
-//        source.registerCorsConfiguration("/**", configuration);
-//
-//        return source;
-//    }
-
     @Bean
     public FilterRegistrationBean<CorsFilter> simpleCorsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

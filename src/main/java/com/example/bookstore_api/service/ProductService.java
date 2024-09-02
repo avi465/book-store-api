@@ -20,9 +20,12 @@ public class ProductService {
     public Product updateProduct(Long id, Product productDetails){
         Product product = productRepository.findById(id).orElseThrow(()-> new NotFoundException("Product not found"));
         product.setBookName(productDetails.getBookName());
+        product.setAuthor(productDetails.getAuthor());
         product.setDescription(productDetails.getDescription());
+        product.setDiscountPrice(productDetails.getDiscountPrice());
         product.setPrice(productDetails.getPrice());
         product.setQuantity(productDetails.getQuantity());
+        product.setBookImage(productDetails.getBookImage());
 
         return productRepository.save(product);
     }

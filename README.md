@@ -79,7 +79,7 @@ Note: Add bearer token for authorized request
   DELETE /api/cart/{itemId} [2]
 ```
 ```http
-  GET /api/cart/{username} [2]
+  GET /api/cart [2]
 ```
 
 #### FEEDBACK
@@ -100,7 +100,7 @@ Note: Add bearer token for authorized request
   GET /api/orders [1]
 ```
 ```http
-  GET /api/orders/history/{username} [1][2]
+  GET /api/orders/history [2]
 ```
 
 #### WISHLIST
@@ -112,5 +112,5 @@ Note: Add bearer token for authorized request
   DELETE /api/wishlist/{itemId} [2]
 ```
 ```http
-  GET /api/wishlist/{username} [2]
+  GET /api/wishlist [2]
 ```

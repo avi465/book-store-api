@@ -28,9 +28,9 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-    @GetMapping("/history/{username}")
-    public ResponseEntity<List<Order>> getOrderHistory(@Valid @PathVariable String username) {
-        List<Order> orders = orderService.getOrderHistory(username);
+    @GetMapping("/history")
+    public ResponseEntity<List<Order>> getOrderHistory() {
+        List<Order> orders = orderService.getOrderHistory();
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 }

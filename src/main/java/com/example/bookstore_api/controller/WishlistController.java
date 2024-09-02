@@ -15,21 +15,21 @@ public class WishlistController {
     @Autowired
     private WishlistService wishlistService;
 
-    @PostMapping
-    public ResponseEntity<Wishlist> addToWishlist(@Valid @RequestBody WishlistItem item, @RequestParam String username) {
-        Wishlist updatedWishlist = wishlistService.addToWishlist(username, item);
+    @PostMapping("/{productId}")
+    public ResponseEntity<Wishlist> addToWishlist(@Valid @PathVariable Long productId) {
+        Wishlist updatedWishlist = wishlistService.addToWishlist(productId);
         return new ResponseEntity<>(updatedWishlist, HttpStatus.OK);
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<Void> removeFromWishlist(@Valid @PathVariable Long itemId, @RequestParam String username) {
-        wishlistService.removeFromWishlist(username, itemId);
+    public ResponseEntity<Void> removeFromWishlist(@Valid @PathVariable Long itemId) {
+        wishlistService.removeFromWishlist(itemId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<Wishlist> getWishlist(@Valid @PathVariable String username){
-        Wishlist wishlist = wishlistService.getWishlist(username);
+    @GetMapping()
+    public ResponseEntity<Wishlist> getWishlist(){
+        Wishlist wishlist = wishlistService.getWishlist();
         return new ResponseEntity<>(wishlist, HttpStatus.OK);
     }
 }
