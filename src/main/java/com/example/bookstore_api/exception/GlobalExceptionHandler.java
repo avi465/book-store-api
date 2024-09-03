@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
-        return new ResponseEntity<>(new ErrorResponse("Unauthorized", "You need to log in to access this resource."), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new ErrorResponse("Unauthorized", "Authentication failed, ensure you have already registered"), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(BadCredentialsException.class)

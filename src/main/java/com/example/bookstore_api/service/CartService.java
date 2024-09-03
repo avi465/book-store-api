@@ -52,7 +52,6 @@ public class CartService {
 
         cart.getItems().add(cartItem);
 
-        cart.getItems().add(cartItem);
         cart = cartRepository.save(cart);
 
         return convertToDto(cart);
@@ -92,8 +91,8 @@ public class CartService {
     private CartDTO convertToDto(Cart cart) {
         List<CartItemDTO> itemDTOs = cart.getItems()
                 .stream()
-                .map(item -> new CartItemDTO(item.getId(), item.getProductId(), item.getQuantity(), item.getPrice()))
+                .map(item -> new CartItemDTO(item.getProductId(), item.getQuantity(), item.getPrice()))
                 .collect(Collectors.toList());
-        return new CartDTO(cart.getId(), cart.getUsername(), itemDTOs);
+        return new CartDTO(cart.getUsername(), itemDTOs);
     }
 }

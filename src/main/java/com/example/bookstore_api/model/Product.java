@@ -2,6 +2,7 @@ package com.example.bookstore_api.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class Product {
     @NotEmpty(message = "Book should not be empty")
     private String bookName;
 
-    @NotEmpty(message = "Author should be empty")
+    @NotEmpty(message = "Author should not be empty")
     private String author;
 
     @NotEmpty(message = "Description should not be empty")
@@ -28,7 +29,7 @@ public class Product {
     @NotEmpty(message = "Quantity should not be empty")
     private String quantity;
 
-    @NotEmpty(message = "Price should not be empty")
+    @NotNull(message = "Price should not be null")
     private Double price;
 
     private Double discountPrice;
